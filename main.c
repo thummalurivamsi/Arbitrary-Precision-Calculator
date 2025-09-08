@@ -54,21 +54,26 @@ int main(int argc, char *argv[])
         else if (cmp == 1)
         {
             subtraction(&head1, &tail1, &head2, &tail2, &headR, &tailR);
-            if (sign1)
-                sign_flag = 1;
         }
         else
         {
             subtraction(&head2, &tail2, &head1, &tail1, &headR, &tailR);
-            sign_flag = !sign_flag; // flip sign
         }
         break;
     }
 
     case 'x':
-        multiplication(&head1, &tail1, &head2, &tail2, &headR, &tailR);
-        if (sign1 ^ sign2)
-            sign_flag = 1; // XOR for sign
+        if (is_zero(head1, tail1) || is_zero(head2, tail2))
+        {
+            headR = createNode(0);
+            tailR = headR;
+            sign_flag = 0;
+        }
+        else
+        {
+            // Perform multiplication as usual
+            multiplication(&head1, &tail1, &head2, &tail2, &headR, &tailR);
+        }
         break;
 
     case '/':
@@ -87,14 +92,10 @@ int main(int argc, char *argv[])
             return FAILURE;
         }
         modulo(&head1, &tail1, &head2, &tail2, &headR, &tailR);
-        if (sign1)
-            sign_flag = 1; // result takes dividend sign
         break;
 
     case 'p':
         power(&head1, &tail1, &head2, &tail2, &headR, &tailR);
-        if (sign1 && is_odd(head2))
-            sign_flag = 1; // negative base & odd exponent
         break;
 
     default:
